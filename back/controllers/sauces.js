@@ -74,24 +74,8 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-    //je trouve la sauce
-    //je verifie que la personne n'est dans aucun des tableau
-    //si la personne n'est pas dans les tableau je verifie son like
-    //si like = 1 alors je met son compteur de like a 1 et je l'ajoute au tableau de ceux qui ont like
-    //si like = -1 alors je met son compteur de dislike a 1 et je l'ajoute au tableau de ceux qui ont dislike
-    //si like = 0 alors je cherche dans quel tableau elle etait et je la supprime du tableau et je fais -1 a son like ou dislike
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
-            // for (i in sauce.usersLiked) {
-            //     if (i == req.auth.userId) {
-            //         res.status(401).json({ message: 'Not authorized' });
-            //     }
-            // }
-            // for (j in sauce.usersDisliked) {
-            //     if (j == req.auth.userId) {
-            //         res.status(401).json({ message: 'Not authorized' });
-            //     }
-            // }
             const likeOrNot = req.body.like;
             switch (likeOrNot) {
                 case 1:
