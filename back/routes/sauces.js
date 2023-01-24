@@ -8,15 +8,18 @@ const sauceCtrl = require('../controllers/sauces');
 router.get('/:id', auth, sauceCtrl.getOneSauce);
 
 //Affiche toutes les sauces
-router.get('/', auth, multer, sauceCtrl.getAllSauces);
+router.get('/', auth, sauceCtrl.getAllSauces);
 
 //Enregistre une sauce
-router.post('/', auth, sauceCtrl.createSauce);
+router.post('/', auth, multer, sauceCtrl.createSauce);
 
 //Modifie une sauce
-router.put('/:id', auth, sauceCtrl.modifySauce);
+router.put('/:id', auth, multer, sauceCtrl.modifySauce);
 
 //Supprime une sauce
 router.delete('/:id', auth, sauceCtrl.deleteSauce);
+
+//Like de la sauce
+router.post('/:id/like', auth, sauceCtrl.likeSauce);
 
 module.exports = router;
