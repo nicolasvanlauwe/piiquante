@@ -28,11 +28,7 @@ exports.createSauce = (req, res, next) => {
     const sauce = new Sauce({
         ...sauceObject,
         userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: []
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
 
     //On sauvegarde la sauce dans notre BDD
@@ -106,8 +102,10 @@ exports.likeSauce = (req, res, next) => {
                         res.status(401).json({ message: 'Not authorized' });
                     }
                     //Sinon like +1 et on ajoute le userId au tableau
-                    sauce.likes += 1;
-                    sauce.usersLiked.push(req.auth.userId);
+                    else {
+                        sauce.likes += 1;
+                        sauce.usersLiked.push(req.auth.userId);
+                    }
                     break;
                 //Cas du dislike
                 case -1:
@@ -116,8 +114,10 @@ exports.likeSauce = (req, res, next) => {
                         res.status(401).json({ message: 'Not authorized' });
                     }
                     //Sinon dislike +1 et on ajoute le userId au tableau
-                    sauce.dislikes += 1;
-                    sauce.usersDisliked.push(req.auth.userId);
+                    else {
+                        sauce.dislikes += 1;
+                        sauce.usersDisliked.push(req.auth.userId);
+                    }
                     break;
                 //Cas ou on enleve son dislike ou son like
                 case 0:
@@ -131,10 +131,10 @@ exports.likeSauce = (req, res, next) => {
                         sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(req.auth.userId), 1);
                         sauce.dislikes += -1
                     }
-
+                    break;
             }
             //On update dans la BDD pour finir
-            Sauce.updateOne(sauce)
+            Sauce.updateOne({ _id: req.params.id }, sauce)
                 .then(() => { res.status(200).json({ message: 'Sauce likée ou non !' }) })
                 .catch(error => { res.status(500).json({ error }); })
         })
