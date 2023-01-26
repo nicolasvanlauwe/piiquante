@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+//on écrit les routes bases et on appelle les fichiers contenant les détails ensuite
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', sauceRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));

@@ -6,6 +6,7 @@ const MIME_TYPES = {
     'image/png': 'png'
 }
 
+//Fonction qui va nous permettre de stocker les images dans notre dossier image
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, 'images')

@@ -1,5 +1,7 @@
+//jwt pour les tokens
 const jwt = require('jsonwebtoken');
 
+//Fonction qui nous renvoie le token bien indenté
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
