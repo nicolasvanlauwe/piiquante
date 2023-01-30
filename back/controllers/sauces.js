@@ -42,13 +42,18 @@ exports.modifySauce = (req, res, next) => {
     //Verification si on a changé d'image et applique le nv chemin si c'est le cas
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    }
+        : { ...req.body };
 
     delete sauceObject._userId;
     //On cherche la bonne sauce
     Sauce.findOne({ _id: req.params.id })
         .then((sauce) => {
+            if (req.file) {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => { });
+            }
             //On regarde si c'est bien l'utilisateur qui l'a créé
             if (sauce.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Not authorized' });
