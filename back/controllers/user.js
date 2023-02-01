@@ -10,6 +10,11 @@ exports.signup = (req, res, next) => {
     //On hash le mdp
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
+            let emailReg = new RegExp(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-z]{2,3})$/);
+            let mdpReg = new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/);
+            if (!emailReg.test(req.body.email) || !mdpReg.test(req.body.password)) {
+                return res.status(500).json({ message: 'E-mail ou mdp non conforme' })
+            }
             //On créer le user
             const user = new User({
                 email: req.body.email,
